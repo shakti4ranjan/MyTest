@@ -1,1 +1,7 @@
-
+streamlit
+fitz
+reportlab.pdfgen
+reportlab.lib.pagesizes
+tempfile
+os
+re
