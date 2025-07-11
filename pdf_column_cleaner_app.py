@@ -15,6 +15,34 @@ if uploaded_file:
         tmp_input.write(uploaded_file.read())
         input_pdf_path = tmp_input.name
 
+def send_email(success: bool, attachment_path=None):
+    sender_email = "your_email@gmail.com"
+    app_password = "your_app_password"  # Use Gmail App Password
+    receiver_email = "recipient_email@gmail.com"
+
+    msg = EmailMessage()
+    if success and attachment_path:
+        msg['Subject'] = '✅ PDF Cleaned Successfully'
+        msg.set_content('Please find the cleaned PDF attached.')
+        with open(attachment_path, "rb") as f:
+            msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename="Cleaned.pdf")
+    else:
+        msg['Subject'] = '❌ PDF Cleaning Failed'
+        msg.set_content('The PDF processing encountered an error.')
+
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(sender_email, app_password)
+            smtp.send_message(msg)
+        return True
+    except Exception as e:
+        st.error(f"📧 Email sending failed: {e}")
+        return False
+
+    
     # Step 1: Extract Text
     doc = fitz.open(input_pdf_path)
     text = ""
@@ -76,5 +104,17 @@ if uploaded_file:
                 y = height - 40
         c.save()
 
+   try:
     with open(output_pdf_path, "rb") as f:
-        st.download_button("📥 Download Cleaned PDF", f.read(), file_name="Steel_Data_Cleaned.pdf", mime="application/pdf")
+        cleaned_pdf_bytes = f.read()
+
+    st.download_button("📥 Download Cleaned PDF", cleaned_pdf_bytes, file_name="Steel_Data_Cleaned.pdf", mime="application/pdf")
+
+    # Send email on success
+    email_sent = send_email(success=True, attachment_path=output_pdf_path)
+    if email_sent:
+        st.success("📧 Email with cleaned PDF sent successfully!")
+
+except Exception as e:
+    st.error(f"⚠️ Something went wrong: {e}")
+    send_email(success=False)
