@@ -4,6 +4,8 @@ from reportlab.lib.pagesizes import letter
 import tempfile
 import os
 import re
+import smtplib
+from email.message import EmailMessage
 import fitz 
 
 st.title("🧹 PDF Column Cleaner (Company & Quantity Remover)")
