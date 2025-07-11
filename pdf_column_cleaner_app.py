@@ -1,10 +1,10 @@
 import streamlit as st
-
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import tempfile
 import os
 import re
+import fitz 
 
 st.title("🧹 PDF Column Cleaner (Company & Quantity Remover)")
 
