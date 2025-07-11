@@ -1,5 +1,5 @@
 import streamlit as st
-import fitz  # PyMuPDF
+#import fitz  # PyMuPDF
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import tempfile
