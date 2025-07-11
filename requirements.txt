@@ -1,4 +1,5 @@
 streamlit
+PyMuPDF
 fitz
 reportlab.pdfgen
 reportlab.lib.pagesizes
